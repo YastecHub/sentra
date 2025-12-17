@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: sentra-api
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: YARNGPT_API_KEY
+        value: sk_live_rGf_AkDLExsArC90eKpX-U0vhtNmGIR3jfSThXojpN8
+      - key: YARNGPT_BASE_URL
+        value: https://yarngpt.ai/api

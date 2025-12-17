@@ -7,7 +7,7 @@ import { specs } from './config/swagger';
 import routes from './routes';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 
 app.use(helmet());
 app.use(cors());
