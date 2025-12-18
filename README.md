@@ -4,9 +4,11 @@
 
 ## 🚀 Quick Demo
 
-**Live API**: `http://localhost:3002`  
-**Swagger Docs**: `http://localhost:3002/api-docs`  
-**Health Check**: `http://localhost:3002/health`
+- **Deployed API**: `https://sentra-2qi7.onrender.com`  
+- **Swagger Docs**: `https://sentra-2qi7.onrender.com/api-docs`  
+- **Health Check**: `https://sentra-2qi7.onrender.com/health`
+
+Note: In development the server runs on `http://localhost:3002`. The docs and examples below show how to switch between local and deployed environments.
 
 ## 🎯 Hackathon Challenge
 
@@ -21,12 +23,12 @@ Sentra addresses critical healthcare and accessibility challenges by providing:
 
 ```bash
 # 1. Install dependencies
-npm install
+pnpm install # or npm install
 
-# 2. Start the server (already configured!)
-npm run dev
+# 2. Start the server locally
+pnpm run dev # or npm run dev
 
-# 3. Test the API
+# 3. Test the local API
 curl http://localhost:3002/health
 ```
 
@@ -79,11 +81,25 @@ POST /api/auth/login     # User login
 ## 🧪 Test the API
 
 ### Quick Health Check
+Use the deployed endpoint:
+```bash
+curl https://sentra-2qi7.onrender.com/health
+```
+
+Or run locally:
 ```bash
 curl http://localhost:3002/health
 ```
 
 ### Generate AI Content
+Deployed:
+```bash
+curl -X POST https://sentra-2qi7.onrender.com/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Write a health tip for staying hydrated"}'
+```
+
+Local:
 ```bash
 curl -X POST http://localhost:3002/api/generate \
   -H "Content-Type: application/json" \
@@ -148,35 +164,33 @@ sentra/
 
 ## 🚀 Frontend Integration
 
-```javascript
-// Ready-to-use API client
-const api = {
-  baseURL: 'http://localhost:3002/api',
-  
-  async analyzeSymptoms(symptoms, patientInfo) {
-    const response = await fetch(`${this.baseURL}/health/analyze-symptoms`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ symptoms, ...patientInfo })
-    });
-    return response.json();
-  },
-  
-  async generateContent(prompt) {
-    const response = await fetch(`${this.baseURL}/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
-    });
-    return response.json();
-  }
-};
+Use a base URL that switches between local and deployed environments. Example (browser-based frontend):
 
-// Usage
-const diagnosis = await api.analyzeSymptoms(
-  ['headache', 'fever'], 
-  { age: 30, sex: 'male' }
-);
+```javascript
+const baseApi = process.env.NODE_ENV === 'production'
+  ? `${window.location.origin}/api`
+  : 'http://localhost:3002/api';
+
+async function analyzeSymptoms(symptoms, patientInfo) {
+  const res = await fetch(`${baseApi}/health/analyze-symptoms`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ symptoms, ...patientInfo })
+  });
+  return res.json();
+}
+
+async function generateContent(prompt) {
+  const res = await fetch(`${baseApi}/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  });
+  return res.json();
+}
+
+// Usage example
+const diagnosis = await analyzeSymptoms(['headache', 'fever'], { age: 30, sex: 'male' });
 ```
 
 ## 📊 Response Format
@@ -200,8 +214,9 @@ All endpoints return consistent JSON:
 ```env
 PORT=3002
 NODE_ENV=development
-YARNGPT_API_KEY=sk_live_rGf_AkDLExsArC90eKpX-U0vhtNmGIR3jfSThXojpN8
+YARNGPT_API_KEY=your_yarngpt_api_key_here
 YARNGPT_BASE_URL=https://yarngpt.ai/api
+SWAGGER_SERVER_URL= # optional: set to your deployed URL in production (e.g. https://sentra-2qi7.onrender.com)
 ```
 
 ## 🏆 Demo Script
