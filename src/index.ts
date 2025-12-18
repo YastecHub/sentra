@@ -23,6 +23,12 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Provide a helpful root route so visiting '/' is useful in a browser
+app.get('/', (req, res) => {
+  // Redirect to API docs by default
+  res.redirect('/api-docs');
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
